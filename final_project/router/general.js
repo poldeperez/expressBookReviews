@@ -54,9 +54,9 @@ public_users.get('/author/:author',function (req, res) {
   let authBooks = [];
   const author = req.params.author;
   for (let key in books) {
-  if (books[key].author === author) {
-    authBooks.push(books[key]);
-  }
+    if (books[key].author === author) {
+        authBooks.push(books[key]);
+    }
 }
 res.send(JSON.stringify(authBooks,null,4));
 });
