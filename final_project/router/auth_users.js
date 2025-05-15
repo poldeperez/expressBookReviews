@@ -6,7 +6,7 @@ const regd_users = express.Router();
 let users = [];
 
 const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
+    return username && typeof username === "string" && !users.some(user => user.username === username);
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
@@ -67,9 +67,21 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   // Invalid request
   return res.status(404).json({ message: "Invalid request for review" });
 });
- // invalid request
- return res.status(404).json({ message: "Invalid request for review" });
-});
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const user = req.session.authorization?.username;
+    const isbn = req.params.isbn;
+  
+    if (user && books[isbn]) {
+      // delete the user's review
+      delete books[isbn].reviews[user];
+    return res.status(200).json({ message: "Review deleted successfully" });
+    }
+  
+    // Invalid request
+    return res.status(404).json({ message: "Invalid request for review" });
+  });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
